@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "fast-two-sms": "^3.0.0",
+    "install": "^0.13.0",
+    "twilio": "^4.21.0"
+  }
+}
