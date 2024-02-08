@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #otpDisplay {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #verificationStatus {
+            margin-top: 15px;
+            font-size: 16px;
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>OTP Generator</h2>
+    <form id="otpForm" action="http://localhost:3000/send-otp" method="post">
+        <label for="countryCode">Country Code:</label>
+        <input type="text" id="countryCode" name="countryCode" placeholder="e.g., +1" required>
+
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" required>
+
+        <button type="submit">Generate OTP</button>
+
+        <label for="otp">Enter OTP:</label>
+        <input type="text" id="otp" name="otp" placeholder="Enter the OTP received">
+
+        <button type="button" onclick="verifyOTP()">Verify OTP</button>
+
+        <div id="verificationStatus"></div>
+    </form>
+</div>
+
+<script>
+    function verifyOTP() {
+        const enteredOTP = document.getElementById('otp').value;
+
+        if (enteredOTP) {
+            // You can perform additional validation if needed
+
+            // AJAX request to the server to verify the OTP
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:3000/verify-otp', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Display verification status
+                    document.getElementById('verificationStatus').innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send(`otp=${enteredOTP}`);
+        } else {
+            alert('Please enter the OTP.');
+        }
+    }
+</script>
+
+</body>
+</html>
