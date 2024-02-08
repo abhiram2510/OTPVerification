@@ -1,15 +1,25 @@
-const fast2sms = require('fast-two-sms')
+const accountSid = 'ACc2b4d01b31bc78fcf349d0156994eff2';
+const authToken = '9c12214c7b7af61ed9cefe47dd867e25';
+const twilioNumber = '+1 424 251 5216';
 
-var options = {
-    authorization:"ys8753syUjp97Q8ThuonFZmTo9qvZpzznw1KWPHkoRWxkU7sWFrkx4A7Aqcb", 
-    message:'This is test OTP from Abhiram',
-    numbers:['9108023445']
-};
+const twilio = require('twilio');
+const client = new twilio(accountSid, authToken);
 
-fast2sms.sendMessage(options)
-    .then((response)=>{
-        console.log(response)
-    })
-    .catch((error) =>{
-        console.log(error)
-})
+function generateOTP() {
+  // Logic to generate a random OTP (e.g., using a library like 'crypto-random-string')
+  // Return the generated OTP
+}
+
+const toPhoneNumber = '+919108023445'; // Replace with the recipient's phone number
+
+const otp = generateOTP();
+
+// Send OTP message
+client.messages
+  .create({
+    body: `Your OTP is: ${otp}`,
+    from: twilioNumber,
+    to: toPhoneNumber,
+  })
+  .then((message) => console.log(`OTP sent: ${message.sid}`))
+  .catch((error) => console.error(`Error sending OTP: ${error.message}`));
