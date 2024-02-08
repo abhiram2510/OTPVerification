@@ -8,7 +8,7 @@ const port = 3000;
 
 // Twilio credentials (replace with your actual values)
 const accountSid = 'ACc2b4d01b31bc78fcf349d0156994eff2';
-const authToken = '9c12214c7b7af61ed9cefe47dd867e25';
+const authToken = '927aba79cb935ee7387898a77aaa7ca4'; // 927aba79cb935ee7387898a77aaa7ca4
 const twilioPhoneNumber = '+14242515216';
 
 const client = new twilio(accountSid, authToken);
@@ -44,6 +44,8 @@ app.post('/send-otp', (req, res) => {
             timestamp: Date.now()
         };
 
+        console.log("req.session.otpData", req.session.otpData);
+
         // Send OTP using Twilio
         client.messages.create({
             body: `Your OTP: ${otp}`,
@@ -63,13 +65,13 @@ app.post('/send-otp', (req, res) => {
 });
 
 app.post('/verify-otp', (req, res) => {
-    const enteredOTP = req.body.otp;
+    const enteredOTP = req.body.otp.toString();
     const storedOTPData = req.session.otpData;
 
     if (enteredOTP && storedOTPData) {
-        const { otp, phoneNumber, timestamp } = storedOTPData;
+        let { otp, phoneNumber, timestamp } = storedOTPData;
+        otp = otp.toString();
 
-        // Check if the OTP is valid
         if (enteredOTP === otp) {
             const currentTime = Date.now();
             const timeDifference = currentTime - timestamp;
